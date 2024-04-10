@@ -32,7 +32,18 @@
  * struct definition should have only the fields mentioned in the assignment
  * description.
 *******************************************************************************/
+struct publication_date {
+	int month;
+	int year;
+};
 
+struct book {
+	char title;
+	char author;
+	char isbn;
+	struct publication_date bookDate;
+	char genre;
+};
 
 /*******************************************************************************
  * Function prototypes - do NOT change the given prototypes. However you may
