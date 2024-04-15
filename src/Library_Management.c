@@ -51,13 +51,20 @@ struct book {
 *******************************************************************************/
 void printMenu(void);
 
+void addBook(void);
+void deleteLastBook(void);
+void displayBookList(void);
+void saveBookListDB(void);
+void readBookListDB(void);
+void exitProgram(void);
+
 /*******************************************************************************
  * Main
 *******************************************************************************/
 int main(void){
 
     printMenu();
-    char dbFileName[] = "database"; 
+    char dbFileName[] = "database"; 		
 
     return 0;
 }
@@ -80,3 +87,68 @@ void printMenu(void){
     	"6. Exit the program\n");
 }
 
+/*******************************************************************************
+ * This function allows the user to add a new book to the library.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void addBook(void){
+	return(0);
+}
+
+/*******************************************************************************
+ * This function deletes the last book added by the user from the library.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void deleteLastBook(void){
+	return(0);
+}
+
+/*******************************************************************************
+ * This function displays all the books currently stored in the library.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void displayBookList(void){
+	return(0);
+}
+
+/*******************************************************************************
+ * This function saves the current library into a DB file.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void saveBookListDB(void){
+	return(0);
+}
+
+/*******************************************************************************
+ * This function checks for a DB file and reads its book library if a DB file is found.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void readBookListDB(void){
+	return(0);
+}
+
+/*******************************************************************************
+ * This function exits the program.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void exitProgram(void){
+	return(0);
+}
