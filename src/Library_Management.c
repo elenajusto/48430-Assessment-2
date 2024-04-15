@@ -64,7 +64,41 @@ void exitProgram(void);
 int main(void){
 
     printMenu();
-    char dbFileName[] = "database"; 		
+    /* char dbFileName[] = "database"; */
+
+	int userInput;
+	scanf("%d", &userInput);
+
+	switch (userInput)
+	{
+	case 1:
+		/* addBook */
+		addBook();
+		break;
+	case 2:
+		/* deleteLastBook */
+		deleteLastBook();
+		break;
+	case 3:
+		/* displayBookList */
+		displayBookList();
+		break;
+	case 4:
+		/* saveBookListDB */
+		saveBookListDB();
+		break;
+	case 5:
+		/* readBookListDB */
+		readBookListDB();
+		break;
+	case 6:
+		/* exitProgram */
+		exitProgram();
+		break;
+	default:
+		printf("Invalid input\r\n");
+		break;
+	}
 
     return 0;
 }
@@ -95,7 +129,7 @@ void printMenu(void){
  * - none
 *******************************************************************************/
 void addBook(void){
-
+	printf("Function running: addBook\r\n");
 }
 
 /*******************************************************************************
@@ -106,7 +140,7 @@ void addBook(void){
  * - none
 *******************************************************************************/
 void deleteLastBook(void){
-
+	printf("Function running: deleteLastBook\r\n");
 }
 
 /*******************************************************************************
@@ -117,7 +151,7 @@ void deleteLastBook(void){
  * - none
 *******************************************************************************/
 void displayBookList(void){
-
+	printf("Function running: displayBookList\r\n");
 }
 
 /*******************************************************************************
@@ -128,7 +162,7 @@ void displayBookList(void){
  * - none
 *******************************************************************************/
 void saveBookListDB(void){
-
+	printf("Function running: saveBookListDB\r\n");
 }
 
 /*******************************************************************************
@@ -139,7 +173,7 @@ void saveBookListDB(void){
  * - none
 *******************************************************************************/
 void readBookListDB(void){
-
+	printf("Function running: readBookListDB\r\n");
 }
 
 /*******************************************************************************
@@ -150,5 +184,5 @@ void readBookListDB(void){
  * - none
 *******************************************************************************/
 void exitProgram(void){
-
+	printf("Function running: exitProgram\r\n");
 }
