@@ -57,7 +57,7 @@ void printMenu(void);
 int main(void){
 
     printMenu();
-    char dbFileName[] = "database";
+    char dbFileName[] = "database"; 
 
     return 0;
 }
