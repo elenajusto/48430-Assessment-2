@@ -1,8 +1,8 @@
 # Variables
 CC=gcc
 CFLAGS=-Wall -Werror -ansi
-SRC_DIR=./src
-OBJ_DIR=./obj/
+SRC_DIR=./src/
+OBJ_DIR=./build/
 SRC_FILE=$(SRC_DIR)Library_Management.c
 OBJ_FILE=$(OBJ_DIR)$(notdir $(SRC_FILE:.c=.o))
 
