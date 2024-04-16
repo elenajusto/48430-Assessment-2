@@ -283,7 +283,18 @@ void saveBookListDB(void){
  * - none
 *******************************************************************************/
 void readBookListDB(void){
-	printf("Function running: readBookListDB\r\n");
+	FILE *fileDB;
+	 /*Open a file in read mode*/ 
+	fileDB = fopen("library.db", "r");
+
+	/* Error message if no file */
+	if(fileDB == NULL) {
+		printf("Read error\n");
+		return;
+	}
+
+	/* Close file */
+	fclose(fileDB); 
 }
 
 /*******************************************************************************
