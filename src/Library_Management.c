@@ -24,8 +24,10 @@
  * List preprocessing directives - you may define your own.
 *******************************************************************************/
 
-#define MAX_COMPANY_SIZE 20
-#define MAX_NAME_SIZE 15
+#define MAX_TITLE_SIZE 100
+#define MAX_AUTHOR_SIZE 50
+#define MAX_ISBN_SIZE 20
+#define MAX_GENRE_SIZE 30
 
 /*******************************************************************************
  * List structs - you may define struct date_time and struct flight only. Each
@@ -38,11 +40,11 @@ struct publication_date {
 };
 
 struct book {
-	char title;
-	char author;
-	char isbn;
-	struct publication_date bookDate;
-	char genre;
+    char title[MAX_TITLE_SIZE];
+    char author[MAX_AUTHOR_SIZE];
+    char isbn[MAX_ISBN_SIZE];
+    struct publication_date bookDate;
+    char genre[MAX_GENRE_SIZE];
 };
 
 /*******************************************************************************
@@ -51,7 +53,9 @@ struct book {
 *******************************************************************************/
 void printMenu(void);
 
-void addBook(void);
+void addBook();
+struct book getBookDetails();
+
 void deleteLastBook(void);
 void displayBookList(void);
 void saveBookListDB(void);
@@ -59,20 +63,39 @@ void readBookListDB(void);
 void exitProgram(void);
 
 /*******************************************************************************
+ * Program Variables
+*******************************************************************************/   
+
+	/*char dbFileName[] = "database";*/
+
+	int userInput;
+
+	struct book *booksLibrary = NULL;
+	int book_count = 0;
+	int book_capacity = 10;
+
+/*******************************************************************************
  * Main
 *******************************************************************************/
 int main(void){
 
+	/********  Main Menu  ********/
     printMenu();
-    /* char dbFileName[] = "database"; */
-
-	int userInput;
 	scanf("%d", &userInput);
 
+	/********  Initialising Library  ********/
+	booksLibrary = calloc(book_capacity, sizeof(struct book));
+    if (!booksLibrary) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+	}
+
+	/********  Function Control  ********/
 	switch (userInput)
 	{
 	case 1:
 		/* addBook */
+		getBookDetails();
 		addBook();
 		break;
 	case 2:
@@ -99,7 +122,6 @@ int main(void){
 		printf("Invalid input\r\n");
 		break;
 	}
-
     return 0;
 }
 
@@ -122,13 +144,44 @@ void printMenu(void){
 }
 
 /*******************************************************************************
+ * Get details of the book the user wants to add.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+struct book getBookDetails(){
+	printf("Function running: getBookDetails\r\n");
+
+	struct book newBook;
+
+	printf("Enter book title: ");
+	fgets(newBook.title, MAX_TITLE_SIZE, stdin);
+
+    printf("Enter author's name: ");
+    fgets(newBook.author, MAX_AUTHOR_SIZE, stdin);
+
+    printf("Enter ISBN: ");
+    fgets(newBook.isbn, MAX_ISBN_SIZE, stdin);
+
+    printf("Enter publication month and year (e.g., 12 1999): ");
+    scanf("%d %d", &newBook.bookDate.month, &newBook.bookDate.year);
+	while(getchar() != '\n');	/* Clear input buffer from scanf */
+
+    printf("Enter genre: ");
+    fgets(newBook.genre, MAX_GENRE_SIZE, stdin);
+
+    return newBook;
+}
+
+/*******************************************************************************
  * This function allows the user to add a new book to the library.
  * inputs:
  * - none
  * outputs:
  * - none
 *******************************************************************************/
-void addBook(void){
+void addBook(){
 	printf("Function running: addBook\r\n");
 }
 
