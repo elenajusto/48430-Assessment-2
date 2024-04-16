@@ -113,6 +113,8 @@ int main(void){
 			break;
 		case 3:
 			/* displayBookList */
+			printf("Title          Author         ISBN       Pub. Date Genre\n");
+			printf("----------     ----------     ---------- --------- --------\n");
 			displayBookList(booksLibrary);
 			break;
 		case 4:
@@ -233,8 +235,6 @@ void deleteLastBook(void){
  * - none
 *******************************************************************************/
 void displayBookList(struct book *books){
-	printf("Function running: displayBookList\r\n");
-
 	int i = 0;
 	while (i < book_count){
 		printFunction(books[i]);
@@ -242,17 +242,16 @@ void displayBookList(struct book *books){
 	}
 }
 
+/*******************************************************************************
+Supporting functions for displayBookList
+*******************************************************************************/
 void printFunction(struct book bookInput){
-	printf("Title: %s\n", bookInput.title);
-    printf("Author: %s\n", bookInput.author);
-    printPublicationDate(bookInput.bookDate); 
-    printf("Genre: %s\n", bookInput.genre);
-    printf("\n");
+	printf("%s           %s            %s   %0d-%d    %s\n", bookInput.title, bookInput.author, 
+																	   bookInput.isbn, bookInput.bookDate.month,
+																	   bookInput.bookDate.year, bookInput.genre);
 }
 
-void printPublicationDate(struct publication_date date) {
-    printf("Publication Date: %02d/%d\n", date.month, date.year);
-}
+
 
 /*******************************************************************************
  * This function saves the current library into a DB file.
