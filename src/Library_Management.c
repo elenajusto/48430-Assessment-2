@@ -88,17 +88,17 @@ void freeLibrary();
 *******************************************************************************/
 int main(void){
 
+	/********  Initialising Library  ********/
+	booksLibrary = calloc(book_capacity, sizeof(struct book));
+	if (!booksLibrary) {
+		fprintf(stderr, "Memory allocation failed\n");
+		exit(EXIT_FAILURE);
+	}
+
 	while(1){
 		/********  Main Menu  ********/
 		printMenu();
 		scanf("%d", &userInput);
-
-		/********  Initialising Library  ********/
-		booksLibrary = calloc(book_capacity, sizeof(struct book));
-		if (!booksLibrary) {
-			fprintf(stderr, "Memory allocation failed\n");
-			exit(EXIT_FAILURE);
-		}
 
 		/********  Function Control  ********/
 		switch (userInput)
@@ -132,6 +132,7 @@ int main(void){
 			break;
 		}
 	}
+	freeLibrary();
     return 0;
 }
 
