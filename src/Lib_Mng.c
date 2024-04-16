@@ -4,7 +4,7 @@
  * Student ID:              Elena Justo
  * Date of submission:      
  * A brief statement on what you could achieve (less than 50 words):
- * 9/15 test cases
+ * 10/15 test cases
  * 
  * A brief statement on what you could NOT achieve (less than 50 words):
  * 
@@ -256,25 +256,60 @@ void printFunction(struct book bookInput){
  * This function saves the current library into a DB file.
 *******************************************************************************/
 void saveBookListDB(void){
-	printf("Function running: saveBookListDB\r\n");
+	FILE *fileDB;
+
+	/* Open a file for writing */ 
+    fileDB = fopen("library.db", "w");
+    if (fileDB == NULL) {
+        fprintf(stderr, "Failed to open file for writing\n");
+        return;
+    }
+
+    /* Write each book to the file */
+	int i = 0;
+	
+    while (i < book_count) {
+        fprintf(fileDB, "%s,%s,%s,%d,%d,%s\n",
+                booksLibrary[i].title,
+                booksLibrary[i].author,
+                booksLibrary[i].isbn,
+                booksLibrary[i].bookDate.month,
+                booksLibrary[i].bookDate.year,
+                booksLibrary[i].genre);
+		i++;
+    }
+	fclose(fileDB);
 }
 
 /*******************************************************************************
  * This function checks for a DB file and reads its book library if a DB file is found.
 *******************************************************************************/
 void readBookListDB(void){
-	FILE *fileDB;
-	 /*Open a file in read mode*/ 
-	fileDB = fopen("library.db", "r");
+    FILE *fileDB;
+    char buffer[1024];
 
-	/* Error message if no file */
-	if(fileDB == NULL) {
-		printf("Read error\n");
-		return;
-	}
+    /* Open the file for reading */
+    fileDB = fopen("library.db", "r");
+    if (fileDB == NULL) {
+        printf("Read error: file not found\n");
+        return;
+    }
 
-	/* Close file */
-	fclose(fileDB); 
+    /* Read each line from the file */
+    while (fgets(buffer, sizeof(buffer), fileDB) != NULL) {
+        struct book newBook;
+        sscanf(buffer, "%[^,],%[^,],%[^,],%d,%d,%[^,\n]",
+               newBook.title,
+               newBook.author,
+               newBook.isbn,
+               &newBook.bookDate.month,
+               &newBook.bookDate.year,
+               newBook.genre);
+        addBook(newBook); 
+    }
+
+    /* Close the file */
+    fclose(fileDB);
 }
 
 /*******************************************************************************
