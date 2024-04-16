@@ -170,23 +170,27 @@ struct book getBookDetails(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
 
-    printf("Enter book title: ");
+    printf("Title: >");
     fgets(newBook.title, MAX_TITLE_SIZE, stdin);
     newBook.title[strcspn(newBook.title, "\n")] = 0;
 
-    printf("Enter author's name: ");
+    printf("Author: >");
     fgets(newBook.author, MAX_AUTHOR_SIZE, stdin);
     newBook.author[strcspn(newBook.author, "\n")] = 0;
 
-    printf("Enter ISBN: ");
+    printf("ISBN: >");
     fgets(newBook.isbn, MAX_ISBN_SIZE, stdin);
     newBook.isbn[strcspn(newBook.isbn, "\n")] = 0;
 
-    printf("Enter publication month and year (e.g., 12 1999): ");
-    scanf("%d %d", &newBook.bookDate.month, &newBook.bookDate.year);
+    printf("Publication_date (month): >");
+    scanf("%d", &newBook.bookDate.month);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
 
-    printf("Enter genre: ");
+	printf("Publication_date (year): >");
+    scanf("%d", &newBook.bookDate.year);
+    while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
+	
+    printf("Genre: >");
     fgets(newBook.genre, MAX_GENRE_SIZE, stdin);
     newBook.genre[strcspn(newBook.genre, "\n")] = 0;
 
@@ -281,6 +285,8 @@ void readBookListDB(void){
 *******************************************************************************/
 void exitProgram(void){
 	printf("Function running: exitProgram\r\n");
+	freeLibrary();
+	exit(EXIT_SUCCESS);
 }
 
 /*******************************************************************************
