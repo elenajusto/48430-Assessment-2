@@ -115,9 +115,9 @@ int main(void){
 			break;
 		case 3:
 			/* displayBookList */
-			printf("Title          Author         ISBN       Pub. Date Genre\n");
-			printf("----------     ----------     ---------- --------- --------\n");
 			if (book_count > 0){
+				printf("Title          Author         ISBN       Pub. Date Genre\n");
+				printf("----------     ----------     ---------- --------- --------\n");
 				displayBookList(booksLibrary);
 			} else {
 				printf("List is empty\n");
