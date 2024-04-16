@@ -4,9 +4,9 @@ CFLAGS=-Wall -Werror -ansi
 SRC_DIR=./src/
 OBJ_DIR=./build/
 EXE_DIR=./build/
-SRC_FILE=$(SRC_DIR)Library_Management.c
+SRC_FILE=$(SRC_DIR)Lib_Mng.c
 OBJ_FILE=$(OBJ_DIR)$(notdir $(SRC_FILE:.c=.o))
-EXE_FILE=$(EXE_DIR)Library_Management
+EXE_FILE=$(EXE_DIR)Lib_Mng
 
 # Default target
 all: $(OBJ_DIR) $(EXE_FILE)
