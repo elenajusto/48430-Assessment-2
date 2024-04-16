@@ -4,7 +4,7 @@
  * Student ID:              Elena Justo
  * Date of submission:      
  * A brief statement on what you could achieve (less than 50 words):
- * 
+ * 9/15 test cases
  * 
  * A brief statement on what you could NOT achieve (less than 50 words):
  * 
@@ -25,7 +25,7 @@
  * List preprocessing directives - you may define your own.
 *******************************************************************************/
 
-#define MAX_TITLE_SIZE 100
+#define MAX_TITLE_SIZE 25
 #define MAX_AUTHOR_SIZE 50
 #define MAX_ISBN_SIZE 13
 #define MAX_GENRE_SIZE 30
@@ -62,7 +62,7 @@ int deleteLastBook(void);
 void displayBookList(struct book *books);
 void printFunction(struct book bookInput);
 void printPublicationDate(struct publication_date date);
-
+void trimLeadingWhitespace(char *str);
 
 void saveBookListDB(void);
 void readBookListDB(void);
@@ -110,7 +110,7 @@ int main(void){
 		case 2:
 			/* deleteLastBook */
 			if (!deleteLastBook()) {
-        		printf("No books to delete.\n");
+        		printf("List is empty\n");
    			}
 			break;
 		case 3:
@@ -136,7 +136,7 @@ int main(void){
 			exitProgram();
 			break;
 		default:
-			printf("Invalid input\r\n");
+			printf("Invalid choice.\n");
 			break;
 		}
 	}
@@ -147,10 +147,6 @@ int main(void){
 /*******************************************************************************
  * This function prints the initial menu with all instructions on how to use
  * this program.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void printMenu(void){
     printf("\nLibrary Management System \n"
@@ -165,10 +161,6 @@ void printMenu(void){
 
 /*******************************************************************************
  * Get details of the book the user wants to add.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 struct book getBookDetails(){
 
@@ -180,15 +172,21 @@ struct book getBookDetails(){
 
     printf("Title: >");
     fgets(newBook.title, MAX_TITLE_SIZE, stdin);
+	trimLeadingWhitespace(newBook.title);
     newBook.title[strcspn(newBook.title, "\n")] = 0;
 
     printf("Author: >");
     fgets(newBook.author, MAX_AUTHOR_SIZE, stdin);
+	trimLeadingWhitespace(newBook.author);
     newBook.author[strcspn(newBook.author, "\n")] = 0;
 
     printf("ISBN: >");
     fgets(newBook.isbn, MAX_ISBN_SIZE, stdin);
+	trimLeadingWhitespace(newBook.isbn);
     newBook.isbn[strcspn(newBook.isbn, "\n")] = 0;
+	if (*newBook.isbn < 0){
+		printf("Invalid ISBN.\n");
+	}
 
     printf("Publication_date(month): >");
     scanf("%d", &newBook.bookDate.month);
@@ -197,9 +195,13 @@ struct book getBookDetails(){
 	printf("Publication_date(year): >");
     scanf("%d", &newBook.bookDate.year);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
+	if (newBook.bookDate.year < 0){
+		printf("Invalid year.\n");
+	}
 	
     printf("Genre: >");
     fgets(newBook.genre, MAX_GENRE_SIZE, stdin);
+	trimLeadingWhitespace(newBook.genre);
     newBook.genre[strcspn(newBook.genre, "\n")] = 0;
 
 	printf("\n");
@@ -209,10 +211,6 @@ struct book getBookDetails(){
 
 /*******************************************************************************
  * This function allows the user to add a new book to the library.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void addBook(struct book bookToAdd){
 
@@ -225,10 +223,6 @@ void addBook(struct book bookToAdd){
 
 /*******************************************************************************
  * This function deletes the last book added by the user from the library.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 int deleteLastBook(void){
     if (book_count > 0) {
@@ -240,10 +234,6 @@ int deleteLastBook(void){
 
 /*******************************************************************************
  * This function displays all the books currently stored in the library.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void displayBookList(struct book *books){
 	int i = 0;
@@ -257,17 +247,13 @@ void displayBookList(struct book *books){
 Supporting functions for displayBookList
 *******************************************************************************/
 void printFunction(struct book bookInput){
-	printf("%s       %s       %s  %0d-%d   %s\n", bookInput.title, bookInput.author, 
-																	   bookInput.isbn, bookInput.bookDate.month,
-																	   bookInput.bookDate.year, bookInput.genre);
+	printf("%-14s %-14s %-10s %02d-%d   %s\n",
+           bookInput.title, bookInput.author, bookInput.isbn,
+           bookInput.bookDate.month, bookInput.bookDate.year, bookInput.genre);
 }
 
 /*******************************************************************************
  * This function saves the current library into a DB file.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void saveBookListDB(void){
 	printf("Function running: saveBookListDB\r\n");
@@ -275,10 +261,6 @@ void saveBookListDB(void){
 
 /*******************************************************************************
  * This function checks for a DB file and reads its book library if a DB file is found.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void readBookListDB(void){
 	FILE *fileDB;
@@ -297,10 +279,6 @@ void readBookListDB(void){
 
 /*******************************************************************************
  * This function exits the program.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void exitProgram(void){
 	freeLibrary();
@@ -309,10 +287,6 @@ void exitProgram(void){
 
 /*******************************************************************************
  * This function dynamically reallocates the memory assigned to the library array.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void resizeLibrary(){
     int new_capacity = book_capacity * 2;
@@ -327,11 +301,31 @@ void resizeLibrary(){
 
 /*******************************************************************************
  * This function clear the allocated memory for the library array.
- * inputs:
- * - none
- * outputs:
- * - none
 *******************************************************************************/
 void freeLibrary(){
 	free(booksLibrary);
 }
+
+/*******************************************************************************
+ * Helper function for trimming leading whitespace chars.
+*******************************************************************************/
+void trimLeadingWhitespace(char *str) {
+    int index, i;
+    index = 0;
+
+    /* Find index of first nonwhitespace character */
+    while (str[index] == ' ' || str[index] == '\t' || str[index] == '\n') {
+        index++;
+    }
+
+    /* Shift all characters to the left */
+    if (index != 0) {
+        i = 0;
+        while (str[i + index] != '\0') {
+            str[i] = str[i + index];
+            i++;
+        }
+        str[i] = '\0'; /* Sentinel string char */
+    }
+}
+ 
