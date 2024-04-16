@@ -27,7 +27,7 @@
 
 #define MAX_TITLE_SIZE 100
 #define MAX_AUTHOR_SIZE 50
-#define MAX_ISBN_SIZE 20
+#define MAX_ISBN_SIZE 13
 #define MAX_GENRE_SIZE 30
 
 /*******************************************************************************
@@ -261,8 +261,6 @@ void printFunction(struct book bookInput){
 																	   bookInput.isbn, bookInput.bookDate.month,
 																	   bookInput.bookDate.year, bookInput.genre);
 }
-
-
 
 /*******************************************************************************
  * This function saves the current library into a DB file.
