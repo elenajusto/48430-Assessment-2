@@ -57,7 +57,7 @@ void printMenu(void);
 void addBook(struct book);
 struct book getBookDetails();
 
-void deleteLastBook(void);
+int deleteLastBook(void);
 
 void displayBookList(struct book *books);
 void printFunction(struct book bookInput);
@@ -109,13 +109,19 @@ int main(void){
 			break;
 		case 2:
 			/* deleteLastBook */
-			deleteLastBook();
+			if (!deleteLastBook()) {
+        		printf("No books to delete.\n");
+   			}
 			break;
 		case 3:
 			/* displayBookList */
 			printf("Title          Author         ISBN       Pub. Date Genre\n");
 			printf("----------     ----------     ---------- --------- --------\n");
-			displayBookList(booksLibrary);
+			if (book_count > 0){
+				displayBookList(booksLibrary);
+			} else {
+				printf("List is empty\n");
+			}
 			break;
 		case 4:
 			/* saveBookListDB */
@@ -148,12 +154,13 @@ int main(void){
 *******************************************************************************/
 void printMenu(void){
     printf("\nLibrary Management System \n"
-    	"1. Add a book\n"
+    	"1. Add book\n"
     	"2. Delete last book\n"
     	"3. Display book list\n"
     	"4. Save the book list to the database\n"
     	"5. Read the book list from the database\n"
     	"6. Exit the program\n");
+	printf("Enter your choice>\n");
 }
 
 /*******************************************************************************
@@ -164,7 +171,6 @@ void printMenu(void){
  * - none
 *******************************************************************************/
 struct book getBookDetails(){
-	printf("Function running: getBookDetails\r\n");
 
 	struct book newBook;
 
@@ -184,17 +190,19 @@ struct book getBookDetails(){
     fgets(newBook.isbn, MAX_ISBN_SIZE, stdin);
     newBook.isbn[strcspn(newBook.isbn, "\n")] = 0;
 
-    printf("Publication_date (month): >");
+    printf("Publication_date(month): >");
     scanf("%d", &newBook.bookDate.month);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
 
-	printf("Publication_date (year): >");
+	printf("Publication_date(year): >");
     scanf("%d", &newBook.bookDate.year);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
 	
     printf("Genre: >");
     fgets(newBook.genre, MAX_GENRE_SIZE, stdin);
     newBook.genre[strcspn(newBook.genre, "\n")] = 0;
+
+	printf("\n");
 
     return newBook;
 }
@@ -207,7 +215,6 @@ struct book getBookDetails(){
  * - none
 *******************************************************************************/
 void addBook(struct book bookToAdd){
-	printf("Function running: addBook\r\n");
 
 	if (book_count == book_capacity) {
         resizeLibrary();
@@ -223,8 +230,12 @@ void addBook(struct book bookToAdd){
  * outputs:
  * - none
 *******************************************************************************/
-void deleteLastBook(void){
-	printf("Function running: deleteLastBook\r\n");
+int deleteLastBook(void){
+    if (book_count > 0) {
+        book_count--; 
+        return 1;  
+    }
+    return 0; 
 }
 
 /*******************************************************************************
@@ -246,7 +257,7 @@ void displayBookList(struct book *books){
 Supporting functions for displayBookList
 *******************************************************************************/
 void printFunction(struct book bookInput){
-	printf("%s           %s            %s   %0d-%d    %s\n", bookInput.title, bookInput.author, 
+	printf("%s       %s       %s  %0d-%d   %s\n", bookInput.title, bookInput.author, 
 																	   bookInput.isbn, bookInput.bookDate.month,
 																	   bookInput.bookDate.year, bookInput.genre);
 }
@@ -283,7 +294,6 @@ void readBookListDB(void){
  * - none
 *******************************************************************************/
 void exitProgram(void){
-	printf("Function running: exitProgram\r\n");
 	freeLibrary();
 	exit(EXIT_SUCCESS);
 }
