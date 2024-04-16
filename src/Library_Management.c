@@ -54,14 +54,22 @@ struct book {
 *******************************************************************************/
 void printMenu(void);
 
-void addBook();
+void addBook(struct book);
 struct book getBookDetails();
 
 void deleteLastBook(void);
-void displayBookList(void);
+
+void displayBookList(struct book *books);
+void printFunction(struct book bookInput);
+void printPublicationDate(struct publication_date date);
+
+
 void saveBookListDB(void);
 void readBookListDB(void);
 void exitProgram(void);
+
+void resizeLibrary();
+void freeLibrary();
 
 /*******************************************************************************
  * Program Variables
@@ -80,48 +88,49 @@ void exitProgram(void);
 *******************************************************************************/
 int main(void){
 
-	/********  Main Menu  ********/
-    printMenu();
-	scanf("%d", &userInput);
+	while(1){
+		/********  Main Menu  ********/
+		printMenu();
+		scanf("%d", &userInput);
 
-	/********  Initialising Library  ********/
-	booksLibrary = calloc(book_capacity, sizeof(struct book));
-    if (!booksLibrary) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-	}
+		/********  Initialising Library  ********/
+		booksLibrary = calloc(book_capacity, sizeof(struct book));
+		if (!booksLibrary) {
+			fprintf(stderr, "Memory allocation failed\n");
+			exit(EXIT_FAILURE);
+		}
 
-	/********  Function Control  ********/
-	switch (userInput)
-	{
-	case 1:
-		/* addBook */
-		getBookDetails();
-		addBook();
-		break;
-	case 2:
-		/* deleteLastBook */
-		deleteLastBook();
-		break;
-	case 3:
-		/* displayBookList */
-		displayBookList();
-		break;
-	case 4:
-		/* saveBookListDB */
-		saveBookListDB();
-		break;
-	case 5:
-		/* readBookListDB */
-		readBookListDB();
-		break;
-	case 6:
-		/* exitProgram */
-		exitProgram();
-		break;
-	default:
-		printf("Invalid input\r\n");
-		break;
+		/********  Function Control  ********/
+		switch (userInput)
+		{
+		case 1:
+			/* addBook */
+			addBook(getBookDetails());
+			break;
+		case 2:
+			/* deleteLastBook */
+			deleteLastBook();
+			break;
+		case 3:
+			/* displayBookList */
+			displayBookList(booksLibrary);
+			break;
+		case 4:
+			/* saveBookListDB */
+			saveBookListDB();
+			break;
+		case 5:
+			/* readBookListDB */
+			readBookListDB();
+			break;
+		case 6:
+			/* exitProgram */
+			exitProgram();
+			break;
+		default:
+			printf("Invalid input\r\n");
+			break;
+		}
 	}
     return 0;
 }
@@ -190,8 +199,14 @@ struct book getBookDetails(){
  * outputs:
  * - none
 *******************************************************************************/
-void addBook(){
+void addBook(struct book bookToAdd){
 	printf("Function running: addBook\r\n");
+
+	if (book_count == book_capacity) {
+        resizeLibrary();
+    }
+    booksLibrary[book_count] = bookToAdd;
+    book_count++;
 }
 
 /*******************************************************************************
@@ -212,8 +227,26 @@ void deleteLastBook(void){
  * outputs:
  * - none
 *******************************************************************************/
-void displayBookList(void){
+void displayBookList(struct book *books){
 	printf("Function running: displayBookList\r\n");
+
+	int i = 0;
+	while (i < book_count){
+		printFunction(books[i]);
+		i++;
+	}
+}
+
+void printFunction(struct book bookInput){
+	printf("Title: %s\n", bookInput.title);
+    printf("Author: %s\n", bookInput.author);
+    printPublicationDate(bookInput.bookDate); 
+    printf("Genre: %s\n", bookInput.genre);
+    printf("\n");
+}
+
+void printPublicationDate(struct publication_date date) {
+    printf("Publication Date: %02d/%d\n", date.month, date.year);
 }
 
 /*******************************************************************************
@@ -247,4 +280,33 @@ void readBookListDB(void){
 *******************************************************************************/
 void exitProgram(void){
 	printf("Function running: exitProgram\r\n");
+}
+
+/*******************************************************************************
+ * This function dynamically reallocates the memory assigned to the library array.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void resizeLibrary(){
+    int new_capacity = book_capacity * 2;
+    struct book *new_library = realloc(booksLibrary, new_capacity * sizeof(struct book));
+    if (!new_library) {
+        perror("Failed to reallocate library");
+        exit(1);
+    }
+    book_capacity = new_capacity;
+    booksLibrary = new_library;
+}
+
+/*******************************************************************************
+ * This function clear the allocated memory for the library array.
+ * inputs:
+ * - none
+ * outputs:
+ * - none
+*******************************************************************************/
+void freeLibrary(){
+	free(booksLibrary);
 }
