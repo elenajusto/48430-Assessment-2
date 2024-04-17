@@ -1,14 +1,19 @@
 /*******************************************************************************
  * 48430 Fundamentals of C Programming - Assignment 2
- * Name:
- * Student ID:              Elena Justo
+ * Name:					Elena Justo
+ * Student ID:              24429298
+ * 
+ * GitHub Repo: https://github.com/elenajusto/48430-Assessment-2
+ * 
  * Date of submission:      
  * A brief statement on what you could achieve (less than 50 words):
- * 10/15 test cases
+ * 10/15 test cases and most of the coding style criteria (depending on the 
+ * marker).
  * 
  * A brief statement on what you could NOT achieve (less than 50 words):
- * 
- * 
+ * The remaining 5 test cases. These seem to be odd user input edge cases 
+ * that I cannot for the life of me figure out at the moment. Maybe with more 
+ * coffee.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -23,10 +28,10 @@
  * Preprocessing directives 
 *******************************************************************************/
 
-#define MAX_TITLE_SIZE 25
-#define MAX_AUTHOR_SIZE 50
-#define MAX_ISBN_SIZE 13
-#define MAX_GENRE_SIZE 30
+#define MAX_TITLE_SIZE 15
+#define MAX_AUTHOR_SIZE 15
+#define MAX_ISBN_SIZE 11
+#define MAX_GENRE_SIZE 10
 
 /*******************************************************************************
  * Structs
