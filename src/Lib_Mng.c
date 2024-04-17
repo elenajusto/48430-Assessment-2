@@ -322,7 +322,7 @@ void readBookListDB(void){
     fileDB = fopen("library.db", "r");
 
     if (fileDB == NULL) {
-        printf("Read error: file not found\n");
+        printf("Read error\n");
         return;
     }
 
