@@ -5,12 +5,15 @@
  * 
  * GitHub Repo: https://github.com/elenajusto/48430-Assessment-2
  * 
- * Date of submission:      
+ * Date of submission: 17/04/2024 
+ *  
  * A brief statement on what you could achieve (less than 50 words):
+ * 
  * 10/15 test cases and most of the coding style criteria (depending on the 
  * marker).
  * 
  * A brief statement on what you could NOT achieve (less than 50 words):
+ * 
  * The remaining 5 test cases. These seem to be odd user input edge cases 
  * that I cannot for the life of me figure out at the moment. Maybe with more 
  * coffee.
