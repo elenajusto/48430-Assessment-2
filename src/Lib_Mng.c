@@ -12,9 +12,7 @@
 *******************************************************************************/
 
 /*******************************************************************************
- * List header files - do NOT use any other header files. Note that stdlib.h is
- * included in case you want to use any of the functions in there. However the
- * task can be achieved with stdio.h and string.h only.
+ * Header files 
 *******************************************************************************/
 
 #include <stdlib.h>
@@ -22,7 +20,7 @@
 #include <string.h>
 
 /*******************************************************************************
- * List preprocessing directives - you may define your own.
+ * Preprocessing directives 
 *******************************************************************************/
 
 #define MAX_TITLE_SIZE 25
@@ -31,9 +29,7 @@
 #define MAX_GENRE_SIZE 30
 
 /*******************************************************************************
- * List structs - you may define struct date_time and struct flight only. Each
- * struct definition should have only the fields mentioned in the assignment
- * description.
+ * Structs
 *******************************************************************************/
 struct publication_date {
 	int month;
@@ -49,8 +45,7 @@ struct book {
 };
 
 /*******************************************************************************
- * Function prototypes - do NOT change the given prototypes. However you may
- * define your own functions if required.
+ * Function prototypes
 *******************************************************************************/
 void printMenu(void);
 
@@ -84,23 +79,27 @@ void freeLibrary();
 	int book_capacity = 10;
 
 /*******************************************************************************
- * Main
+ * Main Program
 *******************************************************************************/
 int main(void){
 
-	/********  Initialising Library  ********/
+	/* Initialise Library */
 	booksLibrary = calloc(book_capacity, sizeof(struct book));
 	if (!booksLibrary) {
 		fprintf(stderr, "Memory allocation failed\n");
 		exit(EXIT_FAILURE);
 	}
 
+	/*******************************************************************************
+ 	* Main Program Loop
+	*******************************************************************************/
 	while(1){
-		/********  Main Menu  ********/
+
+		/* Main Menu  */
 		printMenu();
 		scanf("%d", &userInput);
 
-		/********  Function Control  ********/
+		/*  Function Control */
 		switch (userInput)
 		{
 		case 1:
@@ -136,10 +135,13 @@ int main(void){
 			exitProgram();
 			break;
 		default:
+			/* Invalid user inputs */
 			printf("Invalid choice.\n");
 			break;
 		}
 	}
+
+	/* Free memory when program terminates */
 	freeLibrary();
     return 0;
 }
@@ -161,6 +163,8 @@ void printMenu(void){
 
 /*******************************************************************************
  * Get details of the book the user wants to add.
+ * Input: Done in console
+ * Output: Instance of type Book with user defined parameters
 *******************************************************************************/
 struct book getBookDetails(){
 
@@ -170,16 +174,19 @@ struct book getBookDetails(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {}
 
+	/* Title input */
     printf("Title: >");
     fgets(newBook.title, MAX_TITLE_SIZE, stdin);
 	trimLeadingWhitespace(newBook.title);
     newBook.title[strcspn(newBook.title, "\n")] = 0;
 
+	/* Author input */
     printf("Author: >");
     fgets(newBook.author, MAX_AUTHOR_SIZE, stdin);
 	trimLeadingWhitespace(newBook.author);
     newBook.author[strcspn(newBook.author, "\n")] = 0;
 
+	/* ISBN input */
     printf("ISBN: >");
     fgets(newBook.isbn, MAX_ISBN_SIZE, stdin);
 	trimLeadingWhitespace(newBook.isbn);
@@ -188,10 +195,12 @@ struct book getBookDetails(){
 		printf("Invalid ISBN.\n");
 	}
 
+	/* Publication month input */
     printf("Publication_date(month): >");
     scanf("%d", &newBook.bookDate.month);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
 
+	/* Publication year input */
 	printf("Publication_date(year): >");
     scanf("%d", &newBook.bookDate.year);
     while ((c = getchar()) != '\n' && c != EOF) {} 		/* Clear input buffer from scanf */
@@ -199,25 +208,35 @@ struct book getBookDetails(){
 		printf("Invalid year.\n");
 	}
 	
+	/* Genre input */
     printf("Genre: >");
     fgets(newBook.genre, MAX_GENRE_SIZE, stdin);
 	trimLeadingWhitespace(newBook.genre);
     newBook.genre[strcspn(newBook.genre, "\n")] = 0;
 
+	/* New line character */
 	printf("\n");
 
+	/* Program output */
     return newBook;
 }
 
 /*******************************************************************************
  * This function allows the user to add a new book to the library.
+ * Input: Instance type book
+ * Output: None - Function appends input element to library array instance
 *******************************************************************************/
 void addBook(struct book bookToAdd){
 
+	/* Allocates more memory if capacity has been reached */
 	if (book_count == book_capacity) {
         resizeLibrary();
     }
+
+	/* Add new book to latest point in library */
     booksLibrary[book_count] = bookToAdd;
+
+	/* Increment book count */
     book_count++;
 }
 
@@ -225,6 +244,8 @@ void addBook(struct book bookToAdd){
  * This function deletes the last book added by the user from the library.
 *******************************************************************************/
 int deleteLastBook(void){
+
+	/* Logic ensures there is at least one item to be removed. */
     if (book_count > 0) {
         book_count--; 
         return 1;  
@@ -234,8 +255,12 @@ int deleteLastBook(void){
 
 /*******************************************************************************
  * This function displays all the books currently stored in the library.
+ * Input: Array of book instances (i.e., a library)
+ * Output: None (Prints to console)
 *******************************************************************************/
 void displayBookList(struct book *books){
+	
+	/* Iterate through all book instances in the library */
 	int i = 0;
 	while (i < book_count){
 		printFunction(books[i]);
@@ -244,7 +269,9 @@ void displayBookList(struct book *books){
 }
 
 /*******************************************************************************
-Supporting functions for displayBookList
+ * Print function for items in the library
+ * Input: Book instance from library
+ * Output: None (Prints to console)
 *******************************************************************************/
 void printFunction(struct book bookInput){
 	printf("%-14s %-14s %-10s %02d-%d   %s\n",
@@ -253,7 +280,8 @@ void printFunction(struct book bookInput){
 }
 
 /*******************************************************************************
- * This function saves the current library into a DB file.
+ * This function saves the library into a database file so that future 
+ * instances of the program can load the contents of the current library.
 *******************************************************************************/
 void saveBookListDB(void){
 	FILE *fileDB;
@@ -282,7 +310,9 @@ void saveBookListDB(void){
 }
 
 /*******************************************************************************
- * This function checks for a DB file and reads its book library if a DB file is found.
+ * This function checks if a DB file from a previous instance of the program
+ * is present in the executable's directory and reads its contents into memory
+ * for the current program instance.
 *******************************************************************************/
 void readBookListDB(void){
     FILE *fileDB;
@@ -290,6 +320,7 @@ void readBookListDB(void){
 
     /* Open the file for reading */
     fileDB = fopen("library.db", "r");
+
     if (fileDB == NULL) {
         printf("Read error: file not found\n");
         return;
@@ -316,7 +347,10 @@ void readBookListDB(void){
  * This function exits the program.
 *******************************************************************************/
 void exitProgram(void){
+	/* Frees up memory prior to exiting */
 	freeLibrary();
+
+	/* Exit function */
 	exit(EXIT_SUCCESS);
 }
 
@@ -325,24 +359,31 @@ void exitProgram(void){
 *******************************************************************************/
 void resizeLibrary(){
     int new_capacity = book_capacity * 2;
+
+	/* Create additional memory for library based on current size times 2 */
     struct book *new_library = realloc(booksLibrary, new_capacity * sizeof(struct book));
-    if (!new_library) {
+    
+	if (!new_library) {
         perror("Failed to reallocate library");
         exit(1);
     }
+
+	/* Update variables keeping track of library in memory */
     book_capacity = new_capacity;
     booksLibrary = new_library;
 }
 
 /*******************************************************************************
- * This function clear the allocated memory for the library array.
+ * This function clears the allocated memory for the library array.
 *******************************************************************************/
 void freeLibrary(){
 	free(booksLibrary);
 }
 
 /*******************************************************************************
- * Helper function for trimming leading whitespace chars.
+ * Helper function for trimming leading whitespace characters in strings.
+ * Input: String with leading whitespace characters.
+ * Output: String without leading whitespace characters.
 *******************************************************************************/
 void trimLeadingWhitespace(char *str) {
     int index, i;
